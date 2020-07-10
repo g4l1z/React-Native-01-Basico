@@ -1,14 +1,70 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
-function BoasVindas(props) {
+function BoasVindas({saudacao}) {
 
   const [mensagem, setMensagem] = useState('Seja bem-vindo(a)!');
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [mostraMensagem, setMostraMensagem] = useState(false);
+
+  const _apresentarMensagem = () => {
+    if(!name && !sobrenome) {
+        Alert.alert(
+            'Preenchimento obrigatório', 
+            'Preencha o nome e sobrenome',
+            [
+                { text: 'OK' },
+            ],
+        );
+        return;
+    }
+    setMostraMensagem(true);
+  }
+
+  const _limpar = () => {
+      setNome('');
+      setSobrenome('');
+      setMostraMensagem(false);
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Olá {props.saudacao}</Text>
-      <Text style={styles.texto}>{mensagem}</Text>
+      <TextInput
+        style={styles.campo}
+        placeholder="Digite seu nome"
+        onChangeText={nome => setNome(nome)}
+        value={nome}
+      />
+      <TextInput
+        style={styles.campo}
+        placeholder="Digite seu sobrenome"
+        onChangeText={sobrenome => setSobrenome(sobrenome)}
+        value={sobrenome}
+      />
+      
+      <View style={styles.botaoContainer}>
+          <Button 
+            title="Ok"
+            onPress={_apresentarMensagem}
+          />
+      </View>
+
+      
+      {mostraMensagem && (
+        <View>
+          <Text style={styles.textos} >Olá, {nome} {sobrenome}! {saudacao}</Text>
+          <Text style={styles.textos} >{mensagem}</Text>
+        </View>
+      )}
+
+      <View style={styles.botaoContainer}>
+          <Button 
+            title="Limpar"
+            onPress={_limpar}
+          />
+      </View>
+      
     </View>
   )
 }
@@ -24,6 +80,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFFFFF',
     textAlign: "center",
+  },
+  campo: {
+      backgroundColor: '#dcedff',
+      fontSize: 14,
+      marginBottom: 5,
+      marginTop: 5,
+      borderRadius: 5,
+      height: 35,
+      paddingHorizontal: 10,
+  },
+  botaoContainer: {
+    marginBottom: 5,
+    marginTop: 5,
+    borderRadius: 5,
+  },
+  titulo: {
+      fontSize: 16,
+      color: '#FFF',
+      textAlign: 'center',
+      fontWeight: 'bold'
+  },
+  textos: {
+      fontSize: 14,
+      color: '#FFF',
+      textAlign: 'center',
   },
 });
 export default BoasVindas;
